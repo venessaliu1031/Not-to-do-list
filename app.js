@@ -22,11 +22,11 @@ const itemSchema = new mongoose.Schema ({
 const Item = mongoose.model("Item", itemSchema);
 
 const item1 = new Item ({
-  name: "Welcome to your to-do list :)"
+  name: "Welcome to your not-to-do list :)"
 });
 
 const item2 = new Item ({
-  name: "Keep up the good works!"
+  name: "List things you don't want to do anymore."
 });
 
 
@@ -40,12 +40,14 @@ const listSchema = {
 const List = new mongoose.model("List", listSchema);
 
 
+const day = date.getDate();
+
+const numericDay = date.getNumericDate();
 
 
 app.get("/", function(req, res) {
 
 
-// const day = date.getDate();
 
   Item.find({}, function(err, founditems){
     if (founditems.length === 0) {
@@ -58,7 +60,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/")
     } else {
-      res.render("list", {listTitle: "Today", newListItems: founditems});
+      res.render("list", {listTitle: day, newListItems: founditems, day: numericDay});
     }
 
   })
@@ -76,7 +78,7 @@ app.post("/", function(req, res){
     name: itemName
   });
 
-  if (listName === "Today"){
+  if (listName === day){
     item.save();
     res.redirect("/");
   } else {
@@ -103,26 +105,33 @@ app.post("/", function(req, res){
 app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
 
-  List.findOne({name: customListName}, function(err, foundList){
-    if (foundList) {
-      // show an existing list
-      res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
-      console.log(foundList);
-    } else {
-      // creat a new list
-      const list = new List ({
-        name: customListName,
-        items: defaultItems
-      });
+  if (customListName === "About") {
+    console.log("user wants to go to about page");
+    res.render("about")
+  } else {
+    List.findOne({name: customListName}, function(err, foundList){
+      if (foundList) {
+        if (foundList.items.length ==0) {
+          foundList.items = defaultItems;
+          foundList.save();
+        };
+        // show an existing list
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.items, day: numericDay});
+        console.log(foundList);
+      } else {
+        // creat a new list
+        const list = new List ({
+          name: customListName,
+          items: defaultItems
+        });
 
-      list.save();
+        list.save();
 
-      res.redirect("/"+ customListName);
+        res.redirect("/"+ customListName);
 
-    }
-  })
-
-
+      }
+    })
+  };
 
 })
 
@@ -130,7 +139,7 @@ app.post("/delete", function(req, res){
   const checkedItemID = req.body.checkbox;
   const listName = req.body.listName;
 
-  if (listName === "Today") {
+  if (listName === day) {
     Item.findByIdAndRemove(checkedItemID, function(err){
       if (err) {
         console.log(err);
@@ -166,4 +175,8 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
-app.listen(port);
+app.listen(port, function(err){
+  if (!err){
+    console.log("Starting server successfully");
+  }
+});
