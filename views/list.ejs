@@ -5,20 +5,22 @@
 </div>
 
 <div class="box container">
-  <% newListItems.forEach(function(newItem){ %>
+  <% newListItems.forEach(function(newItem, index){ %>
   <form class="" action="/delete" method="post">
     <div class="item row">
-      <div class="col-6 col-md-2">
+      <div class="col-4 col-md-1">
         <input type="checkbox" name="checkbox" value="<%= newItem._id %>" onchange="this.form.submit()">
       </div>
-      <div class="col-6 col-md-6">
+      <div class="col-8 col-md-8">
 
-        <p><b>Not to</b> <%=  newItem.name  %></p>
+        <p><%=  newItem.name  %></p>
       </div>
-      <div class="col-6 col-md-4">
-        <p>Since <%= day %></p>
+      <% if (index > 1) { %>
+        <div class="col-6 col-md-3">
+          <p>Since <%= newItem.startDay %></p>
 
-      </div>
+        </div>
+      <%} %>
 
     </div>
     <input type="hidden" name="listName" value="<%= listTitle %>">

@@ -1,7 +1,7 @@
 body {
   background-color: #E4E9FD;
   background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
-  min-height: 1000px;
+  min-height: 800px;
   font-family: 'Quicksand';
 }
 
@@ -10,10 +10,15 @@ h1 {
   color: #fff;
   padding: 15px;
 }
-
 h2 {
-  font-weight: bold;
-  padding: 20px;
+  padding: 10px;
+}
+
+hr {
+  width: 10%;
+  height: 1px;
+  border: 0;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 .box {
@@ -23,6 +28,11 @@ h2 {
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
 }
+
+.about {
+  padding: 20px;
+}
+
 
 #heading {
   background-color: #A683E3;
@@ -34,6 +44,7 @@ h2 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #F1F1F1;
+  padding: 0 10px 0 0;
 }
 
 .item:last-child {
@@ -46,12 +57,12 @@ input:checked+p {
 }
 
 input[type="checkbox"] {
-  margin: 20px;
+  margin: 10px;
 }
 
 p {
   margin: 0;
-  padding: 20px;
+  padding: 10px;
   font-size: 20px;
   font-weight: 200;
   color: #00204a;
@@ -99,4 +110,5 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+  padding: 20px;
 }

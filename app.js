@@ -16,7 +16,8 @@ app.use(express.static("public"));
 mongoose.connect("mongodb+srv://venessaliu:lst1031DB@cluster0.3nljc.mongodb.net/todolistDB", { useNewUrlParser: true, useUnifiedTopology: true});
 
 const itemSchema = new mongoose.Schema ({
-  name: String
+  name: String,
+  startDay: String
 });
 
 const Item = mongoose.model("Item", itemSchema);
@@ -60,7 +61,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/")
     } else {
-      res.render("list", {listTitle: day, newListItems: founditems, day: numericDay});
+      res.render("list", {listTitle: day, newListItems: founditems});
     }
 
   })
@@ -75,7 +76,8 @@ app.post("/", function(req, res){
   const listName = req.body.list;
 
   const item = new Item ({
-    name: itemName
+    name: itemName,
+    startDay: numericDay
   });
 
   if (listName === day){
@@ -106,7 +108,6 @@ app.get("/:customListName", function(req, res){
   const customListName = _.capitalize(req.params.customListName);
 
   if (customListName === "About") {
-    console.log("user wants to go to about page");
     res.render("about")
   } else {
     List.findOne({name: customListName}, function(err, foundList){
@@ -116,7 +117,7 @@ app.get("/:customListName", function(req, res){
           foundList.save();
         };
         // show an existing list
-        res.render("list", {listTitle: foundList.name, newListItems: foundList.items, day: numericDay});
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
         console.log(foundList);
       } else {
         // creat a new list
